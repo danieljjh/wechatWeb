@@ -1,5 +1,5 @@
 <template>
-  <div class=" login">
+  <div class="login">
     <div style="height: 80px;"></div>
     <div class="col-md-7">
 
@@ -67,6 +67,8 @@ export default {
     onSubmit(){
       // const regex=/^1[3|4|5|7|8][0-9]{9}$/;
       // axios.post();
+      this.$store.commit('set_token',this.form.phone)
+      console.log(this.$store.state.token)
       if (this.form.checked) {
         Cookie.set('phone', this.form.phone, {expires: 5})
         Cookie.set('password', this.form.password, {expires: 5})
@@ -74,6 +76,7 @@ export default {
         Cookie.remove('phone')
         Cookie.remove('password')
       }
+      this.$router.push('/shouye')
     }
   }
 }
@@ -82,7 +85,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   .login{
-    background: url("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1530603958138&di=a6bef49d9a9706eb1f8423d9b2b3a3ac&imgtype=0&src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F011f6457df87dd0000012e7eb3b780.jpg%401280w_1l_2o_100sh.jpg");
+    background: url("../assets/car.jpg");
   }
   .hello{
     /*text-align: center;*/
