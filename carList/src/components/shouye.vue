@@ -16,9 +16,9 @@
           <div id="collapseOne" class="panel-collapse collapse in shouye-back" role="tabpanel" aria-labelledby="headingOne">
             <div class="panel-body">
               <ul>
-                <li>车辆信息</li>
-                <li>保险和临牌</li>
-                <li>车辆运输</li>
+                <li class="a"><router-link active-class="active" exact  class="item active" to="/car">活动视图</router-link></li>
+                <li><router-link active-class="active"  class="item" to="/guanli">保险和临牌</router-link></li>
+                <li><router-link active-class="active"  class="item" to="/list">车辆运输</router-link></li>
                 <li>车辆交接</li>
                 <li>日常维护</li>
               </ul>
@@ -110,85 +110,80 @@
 
   <!--表格-->
     <div class="col-md-9" style="">
-      <div id="vueapp">
-        <kendo-grid :data-source="localDataSource" :sortable="true" :pageable='pageable'>
-          <kendo-grid-column field="ProductID" title="ID" :width="40"></kendo-grid-column>
-          <kendo-grid-column field="ProductName"></kendo-grid-column>
-          <kendo-grid-column field="UnitPrice" title="Unit Price" :width="120" :format="'{0:c}'" ></kendo-grid-column>
-          <kendo-grid-column field="UnitsInStock" title="Units In Stock" :width="120"></kendo-grid-column>
-          <kendo-grid-column field="Discontinued" :width="120"></kendo-grid-column>
-        </kendo-grid>
-      </div>
+      <router-view></router-view>
     </div>
   </div>
 </template>
 
 <script>
 
+  import axios from "axios"
     export default {
         name: "shouye",
         data(){
           return {
             pageable: {
               refresh: true,
-              pageSize: 5,
-              pageSizes: [20, 50, 100, 200]
+              pageSize: 2,
+              pageSizes: [5,10]
             },
-            localDataSource: [{
-              "ProductID": 1,
-              "ProductName": "Chai",
-              "UnitPrice": 18,
-              "UnitsInStock": 39,
-              "Discontinued": false,
-            },
-              {
-                "ProductID": 2,
-                "ProductName": "Chang",
-                "UnitPrice": 17,
-                "UnitsInStock": 40,
-                "Discontinued": false,
-              },
-              {
-                "ProductID": 3,
-                "ProductName": "Aniseed Syrup",
-                "UnitPrice": 10,
-                "UnitsInStock": 13,
-                "Discontinued": false,
-              },
-              {
-                "ProductID": 4,
-                "ProductName": "Chef Anton's Cajun Seasoning",
-                "UnitPrice": 22,
-                "UnitsInStock": 53,
-                "Discontinued": false,
-              },
-              {
-                "ProductID": 5,
-                "ProductName": "Chef Anton's Gumbo Mix",
-                "UnitPrice": 21.35,
-                "UnitsInStock": 0,
-                "Discontinued": true,
-              },
-              {
-                "ProductID": 6,
-                "ProductName": "Grandma's Boysenberry Spread",
-                "UnitPrice": 25,
-                "UnitsInStock": 120,
-                "Discontinued": false,
-              },
-              {
-                "ProductID": 7,
-                "ProductName": "Uncle Bob's Organic Dried Pears",
-                "UnitPrice": 30,
-                "UnitsInStock": 15,
-                "Discontinued": false,
-              }
-            ]
+            schemaModelFields: {
+              ProductID: { editable: false, nullable: true },
+              ProductName: { validation: { required: true } },
+              UnitPrice: { type: 'number', validation: { required: true, min: 1 } },
+              Discontinued: { type: 'boolean' },
+              UnitsInStock: { type: 'number', validation: { min: 0, required: true } }
+            }
           }
         },
-      created:function(){
 
-      }
+      created:function(){
+        // this.$http.post("http://f2.i568.me/api/client_api/add_client/",{
+        //   UnionID:'sfd',
+        //   avatarUrl: 'dfa',
+        //   city: '感觉',
+        //   gender: 'sf',
+        //   is_active: true,
+        //   name: "我的测试2",
+        //   nickName: "rwewe中文3322",
+        //   notes: 'fs',
+        // }).then(data=>{
+        //   console.log(data)
+        // }).catch(err=>{
+        //   console.log(err)
+        // })
+
+
+
+        // axios.post('client_api/add_client/',{
+        //     UnionID:'sfd',
+        //     avatarUrl: 'dfa',
+        //     city: '感觉',
+        //     gender: 'sf',
+        //     is_active: true,
+        //     name: "我的测试2",
+        //     nickName: "rwewe中文3322",
+        //     notes: 'fs',
+        // }).then(data=>{
+        //   console.log(data)
+        // }).catch(err=>{
+        //   console.log(err)
+        // })
+
+
+        axios.get('client_api/client/').then(data=>{
+          console.log(data)
+        }).catch(err=>{
+          console.log(err)
+        })
+      },
+       methods:{
+         parameterMap: function(options, operation) {
+           if (operation !== 'read' && options.models) {
+             return { models: kendo.stringify(options.models) }
+           }
+         }
+       }
     }
 </script>
 
@@ -214,5 +209,9 @@
     border-bottom:1px dashed gray;
     width: 60%;
     margin: 10px 0;
+  }
+  .router-link-exact-active{
+    color:red;
+    background: white;
   }
 </style>
